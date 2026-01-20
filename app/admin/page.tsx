@@ -1,32 +1,48 @@
 import AdminLayout from '@/components/AdminLayout';
+import AdminDashboardControls from '@/components/AdminDashboardControls';
 import { ShoppingCart, Package, Users, DollarSign, TrendingUp, ArrowUpRight } from 'lucide-react';
 import connectDB from '@/lib/mongodb';
 import Order from '@/models/Order';
 import Product from '@/models/Product';
 import User from '@/models/User';
 
-async function getStats() {
+async function getStats(range?: string) {
     await connectDB();
-    const [orderCount, productCount, userCount, orders] = await Promise.all([
-        Order.countDocuments(),
+
+    let dateFilter = {};
+    if (range === 'weekly') {
+        const lastWeek = new Date();
+        lastWeek.setDate(lastWeek.getDate() - 7);
+        dateFilter = { createdAt: { $gte: lastWeek } };
+    } else if (range === 'monthly') {
+        const lastMonth = new Date();
+        lastMonth.setMonth(lastMonth.getMonth() - 1);
+        dateFilter = { createdAt: { $gte: lastMonth } };
+    }
+
+    const [orderCount, productCount, userCount, filteredOrders, recentOrders] = await Promise.all([
+        Order.countDocuments(dateFilter),
         Product.countDocuments(),
         User.countDocuments(),
-        Order.find().limit(5).sort({ createdAt: -1 }).populate('user', 'name email'),
+        Order.find(dateFilter).sort({ createdAt: -1 }).populate('user', 'name email'),
+        Order.find(dateFilter).limit(5).sort({ createdAt: -1 }).populate('user', 'name email'),
     ]);
 
-    const totalRevenue = orders.reduce((acc, order) => acc + order.totalPrice, 0);
+    const totalRevenue = filteredOrders.reduce((acc, order) => acc + order.totalPrice, 0);
 
     return {
         orderCount,
         productCount,
         userCount,
         totalRevenue,
-        recentOrders: JSON.parse(JSON.stringify(orders)),
+        recentOrders: JSON.parse(JSON.stringify(recentOrders)),
+        allFilteredOrders: JSON.parse(JSON.stringify(filteredOrders)), // For export
     };
 }
 
-export default async function AdminDashboardOverview() {
-    const stats = await getStats();
+export default async function AdminDashboardOverview({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
+    const { range } = await searchParams;
+    const stats = await getStats(range);
 
     const cards = [
         { label: 'Total Revenue', value: `$${stats.totalRevenue.toFixed(2)}`, icon: DollarSign, color: 'text-green-600', bg: 'bg-green-100' },
@@ -37,10 +53,14 @@ export default async function AdminDashboardOverview() {
 
     return (
         <AdminLayout>
-            <header className="mb-10">
-                <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-                <p className="text-gray-500">Welcome to your daily business performance summary.</p>
+            <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <h1 className="text-4xl font-black text-gray-900 tracking-tight">Dashboard Overview</h1>
+                    <p className="text-gray-500 mt-2">Welcome to your daily business performance summary.</p>
+                </div>
             </header>
+
+            <AdminDashboardControls orders={stats.allFilteredOrders} />
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                 {cards.map((card, i) => (
@@ -93,8 +113,8 @@ export default async function AdminDashboardOverview() {
                                         </td>
                                         <td className="px-8 py-6">
                                             <span className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest ${order.status === 'Delivered' ? 'bg-green-100 text-green-700' :
-                                                    order.status === 'Shipped' ? 'bg-blue-100 text-blue-700' :
-                                                        'bg-yellow-100 text-yellow-700'
+                                                order.status === 'Shipped' ? 'bg-blue-100 text-blue-700' :
+                                                    'bg-yellow-100 text-yellow-700'
                                                 }`}>
                                                 {order.status}
                                             </span>
