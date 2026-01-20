@@ -21,9 +21,9 @@ export default function Navbar() {
     }, []);
 
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'glass border-b border-[#D4AF37]/20 py-1' : 'bg-transparent py-4'}`}>
+        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'glass border-b border-[#D4AF37]/20 py-1' : 'bg-transparent py-2'}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-                <div className="flex justify-between items-center h-20">
+                <div className="flex justify-between items-center h-14">
                     {/* Desktop Menu - Left */}
                     <div className="hidden md:flex items-center space-x-10">
                         <Link href="/products" className="text-[11px] tracking-[0.2em] font-semibold hover:text-[#D4AF37] transition-all uppercase">SHOP ALL</Link>

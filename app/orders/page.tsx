@@ -5,7 +5,9 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { Package, Clock, CheckCircle2, Truck, ExternalLink, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
+import { Package, Clock, CheckCircle2, Truck, ExternalLink, ChevronRight, Copy, Check } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function OrdersPage() {
     const { data: session, status } = useSession();
@@ -35,6 +37,18 @@ export default function OrdersPage() {
             case 'Processing': return <Clock className="text-yellow-500" size={18} />;
             default: return <Clock className="text-gray-400" size={18} />;
         }
+    };
+
+    const copyOrderId = (id: string) => {
+        navigator.clipboard.writeText(id);
+        toast.success('Order ID copied!', {
+            icon: '📋',
+            style: {
+                borderRadius: '1rem',
+                background: '#1a1a1a',
+                color: '#fff',
+            },
+        });
     };
 
     return (
@@ -72,7 +86,13 @@ export default function OrdersPage() {
                                     <div className="flex items-center space-x-6">
                                         <div>
                                             <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Order #</p>
-                                            <p className="text-xs font-mono font-bold text-gray-400">...{order._id.slice(-8)}</p>
+                                            <button
+                                                onClick={() => copyOrderId(order._id)}
+                                                className="flex items-center space-x-2 text-xs font-mono font-bold text-gray-400 hover:text-[#d4af37] transition-colors group"
+                                            >
+                                                <span>...{order._id.slice(-8)}</span>
+                                                <Copy size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            </button>
                                         </div>
                                         <div>
                                             <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Date</p>
@@ -84,8 +104,8 @@ export default function OrdersPage() {
                                         </div>
                                     </div>
                                     <div className={`px-4 py-1.5 rounded-full flex items-center space-x-2 text-xs font-bold uppercase tracking-widest border ${order.status === 'Delivered' ? 'bg-green-50 text-green-700 border-green-100' :
-                                            order.status === 'Shipped' ? 'bg-blue-50 text-blue-700 border-blue-100' :
-                                                'bg-yellow-50 text-yellow-700 border-yellow-100'
+                                        order.status === 'Shipped' ? 'bg-blue-50 text-blue-700 border-blue-100' :
+                                            'bg-yellow-50 text-yellow-700 border-yellow-100'
                                         }`}>
                                         {getStatusIcon(order.status)}
                                         <span>{order.status}</span>
@@ -108,9 +128,12 @@ export default function OrdersPage() {
                                     </div>
 
                                     <div className="flex justify-end pt-6 border-t border-gray-50">
-                                        <button className="flex items-center text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[#d4af37] transition-colors">
+                                        <Link
+                                            href={`/orders/${order._id}`}
+                                            className="flex items-center text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[#d4af37] transition-colors"
+                                        >
                                             View Details <ChevronRight size={16} className="ml-1" />
-                                        </button>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>

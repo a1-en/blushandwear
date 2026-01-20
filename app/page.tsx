@@ -31,14 +31,10 @@ export default function Home() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 lg:px-14 w-full">
           <div className="max-w-3xl">
-            <div className="overflow-hidden mb-6">
-              <span className="inline-block px-5 py-2 bg-[#D4AF37] text-white text-[10px] font-bold tracking-[0.3em] uppercase reveal-text">
-                Established 2024 • Excellence in Beauty
-              </span>
-            </div>
 
-            <h1 className="text-6xl md:text-9xl font-serif text-[#0F0F0F] mb-8 leading-[1]">
-              Elevate <br />
+
+            <h1 className="text-5xl md:text-8xl font-serif mb-10 leading-[0.85] tracking-tight">
+              <span className="text-[#91741E] block mb-4 font-bold uppercase tracking-tighter">Elevate</span>
               <span className="text-gradient font-light italic">Every Detail</span>
             </h1>
 
@@ -47,15 +43,9 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 items-center">
-              <Link href="/products" className="premium-button w-full sm:w-auto">
+              <Link href="/products" className="premium-button-gold w-full sm:w-auto">
                 Discover The Collection
               </Link>
-              <button className="flex items-center space-x-4 group text-[#0F0F0F] hover:text-[#D4AF37] transition-all">
-                <div className="w-12 h-12 rounded-full border border-[#0F0F0F]/10 flex items-center justify-center group-hover:border-[#D4AF37] transition-all">
-                  <Play size={16} fill="currentColor" className="ml-1" />
-                </div>
-                <span className="text-[11px] font-bold tracking-[0.2em] uppercase">Watch The Film</span>
-              </button>
             </div>
           </div>
         </div>
