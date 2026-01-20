@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import { CartProvider } from "@/context/CartContext";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -31,6 +32,7 @@ export default function RootLayout({
       >
         <AuthProvider>
           <CartProvider>
+            <Toaster position="bottom-right" reverseOrder={false} />
             {children}
           </CartProvider>
         </AuthProvider>

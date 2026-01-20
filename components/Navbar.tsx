@@ -2,39 +2,52 @@
 
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
-import { ShoppingBag, User, LogOut, Menu, X, LayoutDashboard } from 'lucide-react';
-import { useState } from 'react';
+import { ShoppingBag, User, LogOut, Menu, X, LayoutDashboard, Search } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 
 export default function Navbar() {
     const { data: session } = useSession();
     const [isOpen, setIsOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
     const { cartCount } = useCart();
 
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-[#d4af37]/10">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'glass border-b border-[#D4AF37]/20 py-1' : 'bg-transparent py-4'}`}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
                 <div className="flex justify-between items-center h-20">
-                    {/* Logo */}
-                    <Link href="/" className="flex-shrink-0 flex items-center">
-                        <span className="text-2xl font-serif text-gradient font-bold tracking-tighter">
-                            BLUSH & WEAR
+                    {/* Desktop Menu - Left */}
+                    <div className="hidden md:flex items-center space-x-10">
+                        <Link href="/products" className="text-[11px] tracking-[0.2em] font-semibold hover:text-[#D4AF37] transition-all uppercase">SHOP ALL</Link>
+                        <Link href="/products?category=skincare" className="text-[11px] tracking-[0.2em] font-semibold hover:text-[#D4AF37] transition-all uppercase">SKINCARE</Link>
+                        <Link href="/products?category=makeup" className="text-[11px] tracking-[0.2em] font-semibold hover:text-[#D4AF37] transition-all uppercase">MAKEUP</Link>
+                    </div>
+
+                    {/* Logo - Center */}
+                    <Link href="/" className="flex-shrink-0 flex items-center absolute left-1/2 -translate-x-1/2">
+                        <span className="text-3xl font-serif text-gradient font-bold tracking-[-0.05em]">
+                            Blush&Wear
                         </span>
                     </Link>
 
-                    {/* Desktop Menu */}
-                    <div className="hidden md:flex items-center space-x-8">
-                        <Link href="/products" className="text-sm font-medium hover:text-[#d4af37] transition-colors">SHOP ALL</Link>
-                        <Link href="/products?category=skincare" className="text-sm font-medium hover:text-[#d4af37] transition-colors">SKINCARE</Link>
-                        <Link href="/products?category=makeup" className="text-sm font-medium hover:text-[#d4af37] transition-colors">MAKEUP</Link>
-                    </div>
+                    {/* Right Icons */}
+                    <div className="flex items-center space-x-8">
+                        <button className="hidden md:block group p-1">
+                            <Search size={20} className="group-hover:text-[#D4AF37] transition-colors" strokeWidth={1.5} />
+                        </button>
 
-                    {/* Icons */}
-                    <div className="hidden md:flex items-center space-x-6">
-                        <Link href="/cart" className="relative group">
-                            <ShoppingBag size={22} className="group-hover:text-[#d4af37] transition-colors" />
+                        <Link href="/cart" className="relative group p-1">
+                            <ShoppingBag size={20} className="group-hover:text-[#D4AF37] transition-colors" strokeWidth={1.5} />
                             {cartCount > 0 && (
-                                <span className="absolute -top-2 -right-2 bg-[#d4af37] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
+                                <span className="absolute -top-1 -right-1 bg-[#D4AF37] text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
                                     {cartCount}
                                 </span>
                             )}
@@ -42,56 +55,61 @@ export default function Navbar() {
 
                         {session ? (
                             <div className="relative group">
-                                <button className="flex items-center space-x-2 border border-[#d4af37]/20 rounded-full px-4 py-1.5 hover:bg-[#d4af37]/5 transition-all">
-                                    <User size={18} className="text-[#d4af37]" />
-                                    <span className="text-sm font-medium max-w-[100px] truncate">{session.user?.name}</span>
+                                <button className="flex items-center space-x-2 p-1">
+                                    <User size={20} className="group-hover:text-[#D4AF37] transition-colors" strokeWidth={1.5} />
                                 </button>
 
-                                {/* Dropdown */}
-                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right">
-                                    <div className="py-2">
+                                {/* Premium Dropdown */}
+                                <div className="absolute right-0 mt-4 w-56 bg-white/95 backdrop-blur-md rounded-sm shadow-2xl border border-[#D4AF37]/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right py-4 z-50">
+                                    <div className="px-5 pb-3 mb-3 border-b border-gray-100">
+                                        <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Signed in as</p>
+                                        <p className="text-sm font-semibold truncate">{session.user?.name}</p>
+                                    </div>
+                                    <div className="space-y-1">
                                         {(session.user as any).role === 'ADMIN' && (
-                                            <Link href="/admin" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[#fdf2f2] hover:text-[#d4af37]">
-                                                <LayoutDashboard size={16} className="mr-2" /> Admin Dashboard
+                                            <Link href="/admin" className="flex items-center px-5 py-2 text-xs font-medium uppercase tracking-wider hover:bg-[#FAF9F6] hover:text-[#D4AF37] transition-colors">
+                                                <LayoutDashboard size={14} className="mr-3" /> Dashboard
                                             </Link>
                                         )}
-                                        <Link href="/orders" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[#fdf2f2] hover:text-[#d4af37]">
-                                            <ShoppingBag size={16} className="mr-2" /> My Orders
+                                        <Link href="/orders" className="flex items-center px-5 py-2 text-xs font-medium uppercase tracking-wider hover:bg-[#FAF9F6] hover:text-[#D4AF37] transition-colors">
+                                            <ShoppingBag size={14} className="mr-3" /> My Orders
                                         </Link>
                                         <button
                                             onClick={() => signOut()}
-                                            className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                                            className="w-full flex items-center px-5 py-2 text-xs font-medium uppercase tracking-wider text-red-500 hover:bg-red-50 transition-colors"
                                         >
-                                            <LogOut size={16} className="mr-2" /> Sign Out
+                                            <LogOut size={14} className="mr-3" /> Sign Out
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         ) : (
-                            <Link href="/login" className="gold-button px-6 py-2 rounded-full text-sm font-semibold">
-                                SIGN IN
-                            </Link>
+                            <div className="hidden md:block">
+                                <Link href="/login" className="text-[11px] tracking-[0.2em] font-semibold hover:text-[#D4AF37] transition-all uppercase">
+                                    Sign In
+                                </Link>
+                            </div>
                         )}
-                    </div>
 
-                    {/* Mobile menu button */}
-                    <div className="md:hidden flex items-center">
-                        <button onClick={() => setIsOpen(!isOpen)} className="text-gray-900">
-                            {isOpen ? <X size={24} /> : <Menu size={24} />}
-                        </button>
+                        {/* Mobile menu button */}
+                        <div className="md:hidden flex items-center">
+                            <button onClick={() => setIsOpen(!isOpen)} className="text-gray-900 p-1">
+                                {isOpen ? <X size={24} /> : <Menu size={24} />}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* Mobile Menu */}
             {isOpen && (
-                <div className="md:hidden bg-white border-b border-gray-100 animate-in slide-in-from-top duration-300">
-                    <div className="px-4 pt-2 pb-6 space-y-2">
-                        <Link href="/products" className="block px-3 py-2 text-base font-medium text-gray-700">SHOP ALL</Link>
-                        <Link href="/products?category=skincare" className="block px-3 py-2 text-base font-medium text-gray-700">SKINCARE</Link>
-                        <Link href="/products?category=makeup" className="block px-3 py-2 text-base font-medium text-gray-700">MAKEUP</Link>
+                <div className="md:hidden glass border-b border-[#D4AF37]/20 animate-in slide-in-from-top duration-500 overflow-hidden">
+                    <div className="px-6 pt-4 pb-10 space-y-4">
+                        <Link href="/products" className="block text-sm font-semibold tracking-widest uppercase">SHOP ALL</Link>
+                        <Link href="/products?category=skincare" className="block text-sm font-semibold tracking-widest uppercase">SKINCARE</Link>
+                        <Link href="/products?category=makeup" className="block text-sm font-semibold tracking-widest uppercase">MAKEUP</Link>
                         {!session && (
-                            <Link href="/login" className="block px-3 py-2 text-base font-medium text-[#d4af37]">SIGN IN</Link>
+                            <Link href="/login" className="block text-sm font-semibold tracking-widest uppercase text-[#D4AF37]">SIGN IN</Link>
                         )}
                     </div>
                 </div>

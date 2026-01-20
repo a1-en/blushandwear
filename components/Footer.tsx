@@ -1,66 +1,72 @@
 import Link from 'next/link';
-import { Instagram, Twitter, Facebook, Mail } from 'lucide-react';
+import { Instagram, Twitter, Facebook, Mail, ArrowRight } from 'lucide-react';
 
 export default function Footer() {
     return (
-        <footer className="bg-[#1a1a1a] text-white pt-16 pb-8">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-                    {/* Brand */}
-                    <div className="col-span-1 md:col-span-1">
-                        <h2 className="text-2xl font-serif text-[#d4af37] font-bold mb-6">BLUSH & WEAR</h2>
-                        <p className="text-gray-400 text-sm leading-relaxed mb-6">
-                            Experience the ultimate expression of beauty. Premium, ethical, and elegant cosmetics for the modern individual.
+        <footer className="bg-[#0F0F0F] text-[#FAF9F6] pt-24 pb-12">
+            <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-20">
+                    {/* Brand & Mission */}
+                    <div className="md:col-span-4">
+                        <Link href="/" className="inline-block mb-8">
+                            <span className="text-3xl font-serif text-gradient font-bold tracking-[-0.05em]">
+                                Blush&Wear
+                            </span>
+                        </Link>
+                        <p className="text-white/60 text-sm leading-relaxed font-light tracking-wide max-w-sm mb-10">
+                            The definitive destination for premium cosmetics. We craft an experience that transcends beauty, where every application is a ceremony of self-love and sophistication.
                         </p>
-                        <div className="flex space-x-4">
-                            <Instagram size={20} className="text-gray-400 hover:text-[#d4af37] cursor-pointer" />
-                            <Twitter size={20} className="text-gray-400 hover:text-[#d4af37] cursor-pointer" />
-                            <Facebook size={20} className="text-gray-400 hover:text-[#d4af37] cursor-pointer" />
+                        <div className="flex space-x-6">
+                            <Instagram size={18} className="text-white/40 hover:text-[#D4AF37] transition-colors cursor-pointer" />
+                            <Twitter size={18} className="text-white/40 hover:text-[#D4AF37] transition-colors cursor-pointer" />
+                            <Facebook size={18} className="text-white/40 hover:text-[#D4AF37] transition-colors cursor-pointer" />
                         </div>
                     </div>
 
-                    {/* Quick Links */}
-                    <div>
-                        <h3 className="text-sm font-bold uppercase tracking-widest text-[#d4af37] mb-6">Quick Links</h3>
+                    {/* Quick Navigation */}
+                    <div className="md:col-span-2">
+                        <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37] mb-8">Collections</h3>
                         <ul className="space-y-4">
-                            <li><Link href="/products" className="text-gray-400 hover:text-white text-sm transition-colors">Shop All</Link></li>
-                            <li><Link href="/products?category=best-sellers" className="text-gray-400 hover:text-white text-sm transition-colors">Best Sellers</Link></li>
-                            <li><Link href="/about" className="text-gray-400 hover:text-white text-sm transition-colors">Our Story</Link></li>
+                            <li><Link href="/products" className="text-white/60 hover:text-white text-xs font-light tracking-[0.1em] transition-colors uppercase">Shop All</Link></li>
+                            <li><Link href="/products?category=skincare" className="text-white/60 hover:text-white text-xs font-light tracking-[0.1em] transition-colors uppercase">Skincare</Link></li>
+                            <li><Link href="/products?category=makeup" className="text-white/60 hover:text-white text-xs font-light tracking-[0.1em] transition-colors uppercase">Makeup</Link></li>
+                            <li><Link href="/about" className="text-white/60 hover:text-white text-xs font-light tracking-[0.1em] transition-colors uppercase">Our Story</Link></li>
                         </ul>
                     </div>
 
-                    {/* Customer Care */}
-                    <div>
-                        <h3 className="text-sm font-bold uppercase tracking-widest text-[#d4af37] mb-6">Customer Care</h3>
+                    {/* Assistance */}
+                    <div className="md:col-span-2">
+                        <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37] mb-8">Assistance</h3>
                         <ul className="space-y-4">
-                            <li><Link href="/contact" className="text-gray-400 hover:text-white text-sm transition-colors">Contact Us</Link></li>
-                            <li><Link href="/shipping" className="text-gray-400 hover:text-white text-sm transition-colors">Shipping Info</Link></li>
-                            <li><Link href="/returns" className="text-gray-400 hover:text-white text-sm transition-colors">Returns & Exchanges</Link></li>
+                            <li><Link href="/contact" className="text-white/60 hover:text-white text-xs font-light tracking-[0.1em] transition-colors uppercase">Contact Us</Link></li>
+                            <li><Link href="/shipping" className="text-white/60 hover:text-white text-xs font-light tracking-[0.1em] transition-colors uppercase">Bespoke Shipping</Link></li>
+                            <li><Link href="/returns" className="text-white/60 hover:text-white text-xs font-light tracking-[0.1em] transition-colors uppercase">Care & Returns</Link></li>
                         </ul>
                     </div>
 
-                    {/* Newsletter */}
-                    <div>
-                        <h3 className="text-sm font-bold uppercase tracking-widest text-[#d4af37] mb-6">Newsletter</h3>
-                        <p className="text-gray-400 text-sm mb-4">Subscribe for exclusive offers and news.</p>
-                        <div className="relative">
+                    {/* The Inner Circle (Newsletter) */}
+                    <div className="md:col-span-4">
+                        <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37] mb-8 text-center md:text-left">The Inner Circle</h3>
+                        <p className="text-white/60 text-sm mb-6 font-light tracking-wide text-center md:text-left">Join our community for private access to new collections and exclusive events.</p>
+                        <form className="relative group max-w-md mx-auto md:mx-0">
                             <input
                                 type="email"
-                                placeholder="Your email"
-                                className="w-full bg-white/5 border border-white/10 rounded-full py-3 px-6 text-sm focus:outline-none focus:border-[#d4af37] transition-all"
+                                placeholder="Email Address"
+                                className="w-full bg-transparent border-b border-white/20 py-4 pr-10 text-sm font-light tracking-widest focus:outline-none focus:border-[#D4AF37] transition-all placeholder:text-white/20"
                             />
-                            <button className="absolute right-2 top-1.5 bg-[#d4af37] p-1.5 rounded-full hover:bg-white hover:text-[#d4af37] transition-all">
-                                <Mail size={18} />
+                            <button className="absolute right-0 top-1/2 -translate-y-1/2 text-white/40 group-hover:text-[#D4AF37] transition-all">
+                                <ArrowRight size={20} strokeWidth={1} />
                             </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
 
-                <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 space-y-4 md:space-y-0">
-                    <p>© 2024 BLUSH & WEAR. All rights reserved.</p>
-                    <div className="flex space-x-8">
-                        <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-                        <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+                {/* Bottom Bar */}
+                <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
+                    <p className="text-[10px] text-white/30 uppercase tracking-[0.2em]">© 2024 Blush&Wear • All rights reserved</p>
+                    <div className="flex space-x-12">
+                        <Link href="/privacy" className="text-[10px] text-white/30 hover:text-white uppercase tracking-[0.2em] transition-colors">Privacy</Link>
+                        <Link href="/terms" className="text-[10px] text-white/30 hover:text-white uppercase tracking-[0.2em] transition-colors">Terms</Link>
                     </div>
                 </div>
             </div>

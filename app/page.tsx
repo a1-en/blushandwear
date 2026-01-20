@@ -2,117 +2,168 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Star, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, Star, ShieldCheck, Sparkles, Play } from 'lucide-react';
 
 export default function Home() {
+  const categories = [
+    { name: 'Lips', image: '/cat_lips.png', description: 'Timeless shades for every mood' },
+    { name: 'Eyes', image: '/cat_eyes.png', description: 'Define your gaze with precision' },
+    { name: 'Skincare', image: '/cat_skincare.png', description: 'Unlock your natural radiance' },
+    { name: 'Face', image: '/cat_face.png', description: 'The perfect canvas for beauty' },
+  ];
+
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-[#FAF9F6]">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center pt-20">
+      <section className="relative h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/hero.png"
+            src="/hero_light.png"
             alt="Premium Cosmetics"
             fill
-            className="object-cover brightness-[0.85]"
+            className="object-cover scale-100"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-white/10 lg:bg-gradient-to-r lg:from-white/60 lg:via-white/20 lg:to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="max-w-2xl text-white">
-            <span className="inline-block px-4 py-1.5 bg-[#d4af37] text-white text-xs font-bold tracking-[0.2em] rounded-full mb-6">
-              NEW COLLECTION 2024
-            </span>
-            <h1 className="text-6xl md:text-8xl font-serif mb-6 leading-[1.1]">
-              Unveil Your <br />
-              <span className="text-gradient drop-shadow-sm">Radiance</span>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 lg:px-14 w-full">
+          <div className="max-w-3xl">
+            <div className="overflow-hidden mb-6">
+              <span className="inline-block px-5 py-2 bg-[#D4AF37] text-white text-[10px] font-bold tracking-[0.3em] uppercase reveal-text">
+                Established 2024 • Excellence in Beauty
+              </span>
+            </div>
+
+            <h1 className="text-6xl md:text-9xl font-serif text-[#0F0F0F] mb-8 leading-[1]">
+              Elevate <br />
+              <span className="text-gradient font-light italic">Every Detail</span>
             </h1>
-            <p className="text-xl text-gray-200 mb-10 leading-relaxed max-w-lg">
-              Discover a curated selection of premium cosmetics designed to enhance your natural beauty with effortless elegance.
+
+            <p className="text-lg md:text-xl text-[#333333] mb-12 leading-relaxed max-w-lg font-light tracking-wide">
+              An exquisite collection where science meets sophistication. Designed for those who demand more from their beauty ritual.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/products" className="gold-button px-10 py-4 rounded-full font-bold text-center flex items-center justify-center group">
-                SHOP THE COLLECTION <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+
+            <div className="flex flex-col sm:flex-row gap-6 items-center">
+              <Link href="/products" className="premium-button w-full sm:w-auto">
+                Discover The Collection
               </Link>
-              <Link href="/about" className="glass px-10 py-4 rounded-full font-bold text-center border-white/30 text-white hover:bg-white/10 transition-all">
-                OUR STORY
-              </Link>
+              <button className="flex items-center space-x-4 group text-[#0F0F0F] hover:text-[#D4AF37] transition-all">
+                <div className="w-12 h-12 rounded-full border border-[#0F0F0F]/10 flex items-center justify-center group-hover:border-[#D4AF37] transition-all">
+                  <Play size={16} fill="currentColor" className="ml-1" />
+                </div>
+                <span className="text-[11px] font-bold tracking-[0.2em] uppercase">Watch The Film</span>
+              </button>
             </div>
           </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center">
+          <div className="w-[1px] h-16 bg-gradient-to-b from-[#0F0F0F]/30 to-transparent" />
+          <span className="text-[10px] text-[#0F0F0F]/30 uppercase tracking-[0.4em] mt-4 rotate-180 [writing-mode:vertical-lr]">Scroll</span>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="flex flex-col items-center text-center group">
-              <div className="w-16 h-16 bg-[#fdf2f2] rounded-full flex items-center justify-center mb-6 border border-[#d4af37]/20 group-hover:scale-110 transition-transform">
-                <Sparkles className="text-[#d4af37]" size={28} />
-              </div>
-              <h3 className="text-xl font-serif font-bold mb-4">Premium Quality</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                Formulated with the finest ingredients to ensure lasting results and comfort.
-              </p>
-            </div>
-            <div className="flex flex-col items-center text-center group">
-              <div className="w-16 h-16 bg-[#fdf2f2] rounded-full flex items-center justify-center mb-6 border border-[#d4af37]/20 group-hover:scale-110 transition-transform">
-                <ShieldCheck className="text-[#d4af37]" size={28} />
-              </div>
-              <h3 className="text-xl font-serif font-bold mb-4">Ethically Sourced</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                100% cruelty-free and sustainably sourced ingredients for a cleaner beauty.
-              </p>
-            </div>
-            <div className="flex flex-col items-center text-center group">
-              <div className="w-16 h-16 bg-[#fdf2f2] rounded-full flex items-center justify-center mb-6 border border-[#d4af37]/20 group-hover:scale-110 transition-transform">
-                <Star className="text-[#d4af37]" size={28} />
-              </div>
-              <h3 className="text-xl font-serif font-bold mb-4">Expert Curated</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                Handpicked by top industry experts to give you that celebrity look every day.
-              </p>
-            </div>
-          </div>
+      {/* Philosophy Section */}
+      <section className="py-32 bg-white">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <span className="text-[#D4AF37] text-[11px] font-bold tracking-[0.4em] uppercase mb-8 inline-block">Our Philosophy</span>
+          <h2 className="text-4xl md:text-5xl font-serif mb-12 leading-tight">
+            Beauty is the harmony of <br />
+            <span className="italic">intent and expression.</span>
+          </h2>
+          <div className="w-20 h-[1px] bg-[#D4AF37]/50 mx-auto mb-12" />
+          <p className="text-lg text-muted-foreground leading-relaxed font-light tracking-wide max-w-2xl mx-auto">
+            We believe that cosmetics should not just enhance your features, but reflect your essence. Each formula is crafted with rare ingredients, ensuring that your skin feels as luxurious as it looks. Experience the Blush&Wear standard of uncompromising quality.
+          </p>
         </div>
       </section>
 
       {/* Featured Categories */}
-      <section className="py-24 bg-[#fdf2f2]/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-end mb-16">
+      <section className="py-24 bg-[#FAF9F6]">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10">
+          <div className="flex flex-col md:flex-row justify-between items-baseline mb-20">
             <div>
-              <span className="text-[#d4af37] font-bold tracking-widest text-xs uppercase">Categories</span>
-              <h2 className="text-4xl font-serif mt-2">Shop by Category</h2>
+              <h2 className="text-4xl md:text-6xl font-serif">Curated Collections</h2>
+              <p className="text-muted-foreground mt-4 font-light tracking-widest uppercase text-xs">Explore by department</p>
             </div>
-            <Link href="/products" className="text-[#d4af37] font-bold flex items-center hover:underline decoration-2 underline-offset-8">
-              VIEW ALL <ArrowRight className="ml-2" size={18} />
+            <Link href="/products" className="text-[11px] font-bold tracking-[0.2em] text-[#D4AF37] border-b border-[#D4AF37]/30 pb-1 mt-6 md:mt-0 hover:border-[#D4AF37] transition-all uppercase">
+              View All Products
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {['Lips', 'Eyes', 'Skincare', 'Face'].map((category, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {categories.map((cat, i) => (
               <Link
-                key={category}
-                href={`/products?category=${category.toLowerCase()}`}
-                className="group relative h-80 overflow-hidden rounded-2xl"
+                key={cat.name}
+                href={`/products?category=${cat.name.toLowerCase()}`}
+                className="group relative flex flex-col category-card"
               >
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-500 z-10" />
-                <div className="h-full w-full bg-gray-200 transition-transform duration-700 group-hover:scale-110 flex items-center justify-center text-gray-400">
-                  {/* Fallback pattern/text for categories */}
-                  <span className="font-serif italic text-2xl opacity-20">{category}</span>
+                <div className="relative aspect-[3/4] overflow-hidden mb-6">
+                  <Image
+                    src={cat.image}
+                    alt={cat.name}
+                    fill
+                    className="object-cover transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-all duration-500" />
                 </div>
-                <div className="absolute bottom-6 left-6 z-20">
-                  <h3 className="text-white text-2xl font-serif font-bold">{category}</h3>
-                  <p className="text-white/80 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Discover more</p>
+                <div className="px-2">
+                  <h3 className="text-2xl font-serif mb-2">{cat.name}</h3>
+                  <p className="text-muted-foreground text-xs font-light tracking-wide">{cat.description}</p>
+                  <div className="mt-4 flex items-center text-[#D4AF37] text-[10px] font-bold tracking-[0.2em] uppercase opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
+                    Discover More <ArrowRight className="ml-2" size={14} />
+                  </div>
                 </div>
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Features - Trust Bar */}
+      <section className="py-24 border-y border-[#D4AF37]/10 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+            <div className="flex flex-col items-center text-center">
+              <Sparkles className="text-[#D4AF37] mb-8" size={32} strokeWidth={1} />
+              <h3 className="text-sm font-bold uppercase tracking-[0.2em] mb-4">Artisanal Formulations</h3>
+              <p className="text-muted-foreground text-sm font-light leading-loose">
+                Meticulously developed in small batches to ensure the highest purity and potency for your skin.
+              </p>
+            </div>
+            <div className="flex flex-col items-center text-center">
+              <ShieldCheck className="text-[#D4AF37] mb-8" size={32} strokeWidth={1} />
+              <h3 className="text-sm font-bold uppercase tracking-[0.2em] mb-4">Ethical Excellence</h3>
+              <p className="text-muted-foreground text-sm font-light leading-loose">
+                Our commitment to cruelty-free and sustainably sourced components defines our brand core.
+              </p>
+            </div>
+            <div className="flex flex-col items-center text-center">
+              <Star className="text-[#D4AF37] mb-8" size={32} strokeWidth={1} />
+              <h3 className="text-sm font-bold uppercase tracking-[0.2em] mb-4">Expert Curation</h3>
+              <p className="text-muted-foreground text-sm font-light leading-loose">
+                Selected by a panel of world-renowned aestheticists to provide a professional-grade experience.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Quote / Callout */}
+      <section className="relative py-40 flex items-center justify-center overflow-hidden parallax-bg"
+        style={{ backgroundImage: 'url("/hero_premium.png")', backgroundPosition: 'center 30%' }}>
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
+        <div className="relative z-10 text-center max-w-4xl px-6">
+          <h2 className="text-4xl md:text-6xl font-serif text-white mb-12 italic leading-tight">
+            "True beauty is an radiance that <br /> originates from within."
+          </h2>
+          <Link href="/products" className="premium-button bg-white text-black border-white hover:text-white">
+            Shop The Infinite Collection
+          </Link>
         </div>
       </section>
 
