@@ -1,15 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminLayout from '@/components/AdminLayout';
-import { ChevronLeft, Upload, Save, X, Package, DollarSign, Tag, Info, Layers, Plus } from 'lucide-react';
+import { ChevronLeft, Upload, Save, X, Package, DollarSign, Tag, Info, Layers, Plus, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
-export default function NewProductPage() {
+export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = use(params);
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [fetching, setFetching] = useState(true);
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -19,6 +21,36 @@ export default function NewProductPage() {
         stockCount: '',
         images: [''],
     });
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const res = await fetch(`/api/products/${id}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setFormData({
+                        name: data.name || '',
+                        description: data.description || '',
+                        price: data.price?.toString() || '',
+                        category: data.category || '',
+                        brand: data.brand || '',
+                        stockCount: data.stockCount?.toString() || '',
+                        images: (data.images && data.images.length > 0) ? data.images : [''],
+                    });
+                } else {
+                    toast.error('Failed to fetch product data');
+                    router.push('/admin/products');
+                }
+            } catch (error) {
+                console.error(error);
+                toast.error('Error loading product');
+            } finally {
+                setFetching(false);
+            }
+        };
+
+        fetchProduct();
+    }, [id, router]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -44,8 +76,8 @@ export default function NewProductPage() {
         setLoading(true);
 
         try {
-            const res = await fetch('/api/products', {
-                method: 'POST',
+            const res = await fetch(`/api/products/${id}`, {
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...formData,
@@ -57,12 +89,12 @@ export default function NewProductPage() {
             });
 
             if (res.ok) {
-                toast.success('Product created successfully!');
+                toast.success('Product updated successfully!');
                 router.push('/admin/products');
                 router.refresh();
             } else {
                 const data = await res.json();
-                toast.error(data.message || 'Failed to create product');
+                toast.error(data.message || 'Failed to update product');
             }
         } catch (error) {
             console.error(error);
@@ -72,6 +104,17 @@ export default function NewProductPage() {
         }
     };
 
+    if (fetching) {
+        return (
+            <AdminLayout>
+                <div className="flex flex-col items-center justify-center min-h-[60vh]">
+                    <Loader2 className="animate-spin text-[#d4af37] mb-4" size={40} />
+                    <p className="text-gray-500 font-medium">Loading product details...</p>
+                </div>
+            </AdminLayout>
+        );
+    }
+
     return (
         <AdminLayout>
             <div className="max-w-4xl mx-auto">
@@ -80,8 +123,8 @@ export default function NewProductPage() {
                         <Link href="/admin/products" className="flex items-center text-gray-500 hover:text-[#d4af37] transition-colors mb-4 font-medium">
                             <ChevronLeft size={20} className="mr-1" /> Back to Products
                         </Link>
-                        <h1 className="text-3xl font-bold text-gray-900">Add New Product</h1>
-                        <p className="text-gray-500">List a new luxury cosmetic item to your store.</p>
+                        <h1 className="text-3xl font-bold text-gray-900">Edit Product</h1>
+                        <p className="text-gray-500">Update your luxury cosmetic item details.</p>
                     </div>
                 </header>
 
@@ -237,28 +280,6 @@ export default function NewProductPage() {
                                 <span className="text-[10px] font-bold uppercase tracking-widest">Add URL</span>
                             </button>
                         </div>
-
-                        <div className="p-6 bg-[#fdf2f2] rounded-2xl border border-[#d4af37]/10">
-                            <h4 className="text-sm font-bold text-[#d4af37] mb-2 flex items-center">
-                                <Info size={14} className="mr-2" /> PRO TIP: UPLOAD FROM DEVICE
-                            </h4>
-                            <p className="text-xs text-gray-600 leading-relaxed mb-4">
-                                To enable direct file uploads, it is best to integrate a cloud storage service like <strong>Cloudinary</strong> or <strong>Uploadthing</strong>. This ensures your images are optimized and served via a global CDN.
-                            </p>
-                            <label className="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-xl text-[10px] font-bold text-gray-700 cursor-pointer hover:bg-gray-50 transition-all shadow-sm">
-                                <Upload size={14} className="mr-2 text-[#d4af37]" /> SIMULATE FILE PICKER
-                                <input
-                                    type="file"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                            alert("File selection detected: " + file.name + "\n\nIn a production environment, we would upload this to Cloudinary and get a URL. For now, please use an image URL.");
-                                        }
-                                    }}
-                                />
-                            </label>
-                        </div>
                     </div>
 
                     <div className="flex justify-end gap-4">
@@ -277,7 +298,7 @@ export default function NewProductPage() {
                                 'SAVING...'
                             ) : (
                                 <>
-                                    <Save size={20} className="mr-2" /> SAVE PRODUCT
+                                    <Save size={20} className="mr-2" /> UPDATE PRODUCT
                                 </>
                             )}
                         </button>

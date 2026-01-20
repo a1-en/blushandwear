@@ -45,7 +45,13 @@ export default function CartPage() {
                         {cart.map((item) => (
                             <div key={item._id} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex gap-6">
                                 <div className="relative w-32 h-40 flex-shrink-0 rounded-xl overflow-hidden bg-gray-50 border border-gray-100">
-                                    <Image src={item.image} alt={item.name} fill className="object-cover" />
+                                    {item.image && typeof item.image === 'string' ? (
+                                        <Image src={item.image} alt={item.name} fill className="object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+                                            <ShoppingBag size={32} strokeWidth={1} />
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="flex-grow flex flex-col py-2">

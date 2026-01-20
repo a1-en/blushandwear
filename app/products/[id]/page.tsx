@@ -34,13 +34,19 @@ export default async function ProductDetailPage({
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
                     {/* Product Image */}
                     <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-gray-50 border border-gray-100">
-                        <Image
-                            src={product.images[0]}
-                            alt={product.name}
-                            fill
-                            className="object-cover"
-                            priority
-                        />
+                        {product.images?.[0] && typeof product.images[0] === 'string' ? (
+                            <Image
+                                src={product.images[0]}
+                                alt={product.name}
+                                fill
+                                className="object-cover"
+                                priority
+                            />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gray-50 text-gray-400">
+                                <Star size={48} strokeWidth={1} className="text-[#d4af37]/20" />
+                            </div>
+                        )}
                     </div>
 
                     {/* Product Info */}

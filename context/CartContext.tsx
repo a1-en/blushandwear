@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 interface CartItem {
     _id: string;
@@ -59,7 +60,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                     _id: product._id,
                     name: product.name,
                     price: product.price,
-                    image: product.images?.[0] || '',
+                    image: product.image || product.images?.[0] || '',
                     quantity: 1,
                     stockCount: product.stockCount || 99,
                 },
@@ -68,6 +69,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     };
 
     const removeFromCart = (productId: string) => {
+        const item = cart.find(i => i._id === productId);
+        if (item) {
+            toast.success(`Removed ${item.name} from bag`, {
+                icon: '🗑️',
+                style: {
+                    borderRadius: '1rem',
+                    background: '#1a1a1a',
+                    color: '#fff',
+                },
+            });
+        }
         setCart((prevCart) => prevCart.filter((item) => item._id !== productId));
     };
 

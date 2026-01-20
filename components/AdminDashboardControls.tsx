@@ -1,7 +1,8 @@
 'use client';
 
-import { Download, Filter, Calendar } from 'lucide-react';
+import { Download, Filter, Calendar, CheckCircle2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 interface AdminDashboardControlsProps {
     orders: any[];
@@ -24,34 +25,44 @@ export default function AdminDashboardControls({ orders }: AdminDashboardControl
 
     const handleExport = () => {
         if (!orders || orders.length === 0) {
-            alert('No data to export');
+            toast.error('No data available to export');
             return;
         }
 
-        // CSV Generation
-        const headers = ['Order ID', 'Date', 'Customer Name', 'Customer Email', 'Total Price', 'Status', 'Paid'];
-        const csvRows = orders.map(order => {
-            return [
-                order._id,
-                new Date(order.createdAt).toISOString(),
-                order.user?.name || 'N/A',
-                order.user?.email || 'N/A',
-                order.totalPrice,
-                order.status,
-                order.isPaid ? 'Yes' : 'No'
-            ].map(value => `"${value}"`).join(',');
-        });
+        toast.promise(
+            new Promise((resolve) => {
+                // CSV Generation
+                const headers = ['Order ID', 'Date', 'Customer Name', 'Customer Email', 'Total Price', 'Status', 'Paid'];
+                const csvRows = orders.map(order => {
+                    return [
+                        order._id,
+                        new Date(order.createdAt).toISOString(),
+                        order.user?.name || 'N/A',
+                        order.user?.email || 'N/A',
+                        order.totalPrice,
+                        order.status,
+                        order.isPaid ? 'Yes' : 'No'
+                    ].map(value => `"${value}"`).join(',');
+                });
 
-        const csvContent = [headers.join(','), ...csvRows].join('\n');
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.setAttribute('href', url);
-        link.setAttribute('download', `blush_wear_orders_${currentRange}_${new Date().toISOString().split('T')[0]}.csv`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+                const csvContent = [headers.join(','), ...csvRows].join('\n');
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', `blush_wear_orders_${currentRange}_${new Date().toISOString().split('T')[0]}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                setTimeout(resolve, 500);
+            }),
+            {
+                loading: 'Preparing export...',
+                success: 'File downloaded successfully!',
+                error: 'Export failed',
+            }
+        );
     };
 
     return (

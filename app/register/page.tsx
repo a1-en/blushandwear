@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { User, Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function RegisterPage() {
     const [name, setName] = useState('');
@@ -33,9 +34,11 @@ export default function RegisterPage() {
                 throw new Error(data.message || 'Something went wrong');
             }
 
+            toast.success('Registration successful!');
             router.push('/login?registered=true');
         } catch (err: any) {
             setError(err.message);
+            toast.error(err.message || 'Registration failed');
         } finally {
             setLoading(false);
         }

@@ -5,6 +5,9 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -12,6 +15,13 @@ export default function LoginPage() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        if (searchParams.get('registered')) {
+            toast.success('Account created! Please sign in.');
+        }
+    }, [searchParams]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -27,12 +37,15 @@ export default function LoginPage() {
 
             if (res?.error) {
                 setError('Invalid credentials');
+                toast.error('Invalid email or password');
             } else {
+                toast.success('Welcome back!');
                 router.push('/');
                 router.refresh();
             }
         } catch (err) {
             setError('Something went wrong');
+            toast.error('An unexpected error occurred');
         } finally {
             setLoading(false);
         }

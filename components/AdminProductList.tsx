@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Edit, Trash2, Search, Package } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 interface Product {
     _id: string;
@@ -30,13 +31,14 @@ export default function AdminProductList({ initialProducts }: { initialProducts:
 
             if (res.ok) {
                 setProducts(products.filter(p => p._id !== id));
+                toast.success(`Product "${name}" deleted successfully`);
                 router.refresh();
             } else {
-                alert('Failed to delete product');
+                toast.error('Failed to delete product');
             }
         } catch (error) {
             console.error(error);
-            alert('Something went wrong');
+            toast.error('Something went wrong');
         }
     };
 

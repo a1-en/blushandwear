@@ -37,12 +37,18 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="group bg-white overflow-hidden border border-[#E8E4E1] transition-all duration-700 hover:border-[#D4AF37]/30 flex flex-col h-full">
             {/* Image Container */}
             <Link href={`/products/${product._id}`} className="relative aspect-[4/5] overflow-hidden bg-[#FAF9F6]">
-                <Image
-                    src={product.images[0]}
-                    alt={product.name}
-                    fill
-                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                />
+                {product.images?.[0] && typeof product.images[0] === 'string' ? (
+                    <Image
+                        src={product.images[0]}
+                        alt={product.name}
+                        fill
+                        className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                    />
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-[#FAF9F6]">
+                        <ShoppingBag size={48} strokeWidth={0.5} className="text-[#D4AF37]/20" />
+                    </div>
+                )}
 
                 {/* Status Tag */}
                 <div className="absolute top-4 left-4 z-10">
