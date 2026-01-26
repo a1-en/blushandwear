@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Edit, Trash2, Search, Package } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import ConfirmModal from './ConfirmModal';
 
 interface Product {
     _id: string;
@@ -19,19 +20,24 @@ interface Product {
 export default function AdminProductList({ initialProducts }: { initialProducts: Product[] }) {
     const [products, setProducts] = useState(initialProducts);
     const [searchTerm, setSearchTerm] = useState('');
+    const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; productId: string; productName: string }>({
+        isOpen: false,
+        productId: '',
+        productName: ''
+    });
     const router = useRouter();
 
-    const handleDelete = async (id: string, name: string) => {
-        if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+    const handleDelete = async () => {
+        const { productId, productName } = deleteModal;
 
         try {
-            const res = await fetch(`/api/products/${id}`, {
+            const res = await fetch(`/api/products/${productId}`, {
                 method: 'DELETE',
             });
 
             if (res.ok) {
-                setProducts(products.filter(p => p._id !== id));
-                toast.success(`Product "${name}" deleted successfully`);
+                setProducts(products.filter(p => p._id !== productId));
+                toast.success(`Product "${productName}" deleted successfully`);
                 router.refresh();
             } else {
                 toast.error('Failed to delete product');
@@ -115,7 +121,7 @@ export default function AdminProductList({ initialProducts }: { initialProducts:
                                             <Edit size={18} />
                                         </Link>
                                         <button
-                                            onClick={() => handleDelete(product._id, product.name)}
+                                            onClick={() => setDeleteModal({ isOpen: true, productId: product._id, productName: product.name })}
                                             className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
                                         >
                                             <Trash2 size={18} />
@@ -127,6 +133,17 @@ export default function AdminProductList({ initialProducts }: { initialProducts:
                     </tbody>
                 </table>
             </div>
+
+            <ConfirmModal
+                isOpen={deleteModal.isOpen}
+                onClose={() => setDeleteModal({ isOpen: false, productId: '', productName: '' })}
+                onConfirm={handleDelete}
+                title="Delete Product"
+                message={`Are you sure you want to delete "${deleteModal.productName}"? This action cannot be undone.`}
+                confirmText="Delete"
+                cancelText="Cancel"
+                variant="danger"
+            />
         </div>
     );
 }
