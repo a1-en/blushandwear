@@ -34,10 +34,16 @@ export default function ProductGrid({ initialProducts }: { initialProducts: Prod
         }
     }, [categoryParam]);
 
-    // Get unique categories
     const categories = useMemo(() => {
-        const cats = new Set(initialProducts.map(p => p.category));
-        return ['All', ...Array.from(cats)].map(c =>
+        // Start with the specific order requested by the user + common ones
+        const predefined = ['Skincare', 'Makeup', 'Lips', 'Face'];
+        const dynamicCats = initialProducts.map(p => p.category);
+
+        // Combine and distinct
+        const allCats = new Set([...predefined, ...dynamicCats]);
+
+        // Return structured list
+        return ['All', ...Array.from(allCats)].map(c =>
             c.charAt(0).toUpperCase() + c.slice(1).toLowerCase()
         );
     }, [initialProducts]);

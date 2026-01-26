@@ -5,18 +5,18 @@ export default function Footer() {
     return (
         <footer className="bg-[#0F0F0F] text-[#FAF9F6] pt-24 pb-12">
             <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-20">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 mb-20 text-center md:text-left">
                     {/* Brand & Mission */}
-                    <div className="md:col-span-4">
+                    <div className="md:col-span-4 flex flex-col items-center md:items-start">
                         <Link href="/" className="inline-block mb-8">
                             <span className="text-3xl font-serif text-gradient font-bold tracking-[-0.05em]">
                                 Blush&Wear
                             </span>
                         </Link>
-                        <p className="text-white/60 text-sm leading-relaxed font-light tracking-wide max-w-sm mb-10">
+                        <p className="text-white/60 text-sm leading-relaxed font-light tracking-wide max-w-sm mb-10 mx-auto md:mx-0">
                             The definitive destination for premium cosmetics. We craft an experience that transcends beauty, where every application is a ceremony of self-love and sophistication.
                         </p>
-                        <div className="flex space-x-6">
+                        <div className="flex space-x-6 justify-center md:justify-start w-full">
                             <Instagram size={18} className="text-white/40 hover:text-[#D4AF37] transition-colors cursor-pointer" />
                             <Twitter size={18} className="text-white/40 hover:text-[#D4AF37] transition-colors cursor-pointer" />
                             <Facebook size={18} className="text-white/40 hover:text-[#D4AF37] transition-colors cursor-pointer" />
@@ -52,7 +52,7 @@ export default function Footer() {
                             <input
                                 type="email"
                                 placeholder="Email Address"
-                                className="w-full bg-transparent border-b border-white/20 py-4 pr-10 text-sm font-light tracking-widest focus:outline-none focus:border-[#D4AF37] transition-all placeholder:text-white/20"
+                                className="w-full bg-transparent border-b border-white/20 py-4 pr-10 text-sm font-light tracking-widest focus:outline-none focus:border-[#D4AF37] transition-all placeholder:text-white/20 text-center md:text-left"
                             />
                             <button className="absolute right-0 top-1/2 -translate-y-1/2 text-white/40 group-hover:text-[#D4AF37] transition-all">
                                 <ArrowRight size={20} strokeWidth={1} />

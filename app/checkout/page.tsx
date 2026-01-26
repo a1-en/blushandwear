@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Loader2, CheckCircle, CreditCard, MapPin } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 export default function CheckoutPage() {
     const { cart, cartTotal, clearCart } = useCart();
@@ -22,9 +23,25 @@ export default function CheckoutPage() {
         country: '',
     });
 
+    useEffect(() => {
+        if (status === 'unauthenticated') {
+            toast.error('Please log in or create an account to place an order.', {
+                id: 'checkout-auth-error', // Prevents duplicates
+            });
+            router.push('/login?callbackUrl=/checkout');
+        }
+    }, [status, router]);
+
+    if (status === 'loading') {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-[#fdf2f2]/20">
+                <Loader2 className="animate-spin text-[#d4af37]" size={48} />
+            </div>
+        );
+    }
+
     if (status === 'unauthenticated') {
-        router.push('/login?callbackUrl=/checkout');
-        return null;
+        return null; // Don't render anything while redirecting
     }
 
     const handlePlaceOrder = async (e: React.FormEvent) => {
