@@ -11,7 +11,7 @@ import toast from 'react-hot-toast';
 
 export default function OrdersPage() {
     const { data: session, status } = useSession();
-    const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
@@ -24,7 +24,17 @@ export default function OrdersPage() {
             fetch('/api/orders/user')
                 .then(res => res.json())
                 .then(data => {
-                    setOrders(data);
+                    if (Array.isArray(data)) {
+                        setOrders(data);
+                    } else {
+                        console.error('Expected array from /api/orders/user but got:', data);
+                        setOrders([]);
+                    }
+                    setLoading(false);
+                })
+                .catch((err: any) => {
+                    console.error('Error fetching orders:', err);
+                    setOrders([]);
                     setLoading(false);
                 });
         }
