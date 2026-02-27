@@ -85,7 +85,14 @@ export default function Navbar() {
         <div>
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'glass border-b border-[#D4AF37]/20 py-1' : 'bg-transparent py-2'}`}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-                    <div className="flex justify-between items-center h-14">
+                    <div className="flex justify-between items-center h-14 relative">
+                        {/* Mobile Menu Button - Left */}
+                        <div className="md:hidden flex items-center">
+                            <button onClick={() => setIsOpen(!isOpen)} className="text-gray-900 p-1">
+                                {isOpen ? <X size={24} /> : <Menu size={24} />}
+                            </button>
+                        </div>
+
                         {/* Desktop Menu - Left */}
                         <div className="hidden md:flex items-center space-x-10">
                             <Link href="/products" className="text-[11px] tracking-[0.2em] font-semibold hover:text-[#D4AF37] transition-all uppercase">SHOP ALL</Link>
@@ -95,13 +102,13 @@ export default function Navbar() {
 
                         {/* Logo - Center */}
                         <Link href="/" className="flex-shrink-0 flex items-center absolute left-1/2 -translate-x-1/2 z-50">
-                            <span className={`text-3xl font-serif text-gradient font-bold tracking-[-0.05em] transition-opacity duration-300 ${isSearchOpen ? 'opacity-0' : 'opacity-100'}`}>
+                            <span className={`text-2xl md:text-3xl font-serif text-gradient font-bold tracking-[-0.05em] transition-opacity duration-300 ${isSearchOpen ? 'opacity-0' : 'opacity-100'}`}>
                                 Blush&Wear
                             </span>
                         </Link>
 
                         {/* Right Icons */}
-                        <div className="flex items-center space-x-8">
+                        <div className="flex items-center space-x-4 md:space-x-8">
                             <button
                                 onClick={() => setIsSearchOpen(true)}
                                 className="group p-1"
@@ -119,7 +126,7 @@ export default function Navbar() {
                             </Link>
 
                             {session ? (
-                                <div className="relative group">
+                                <div className="hidden md:block relative group">
                                     <button className="flex items-center space-x-2 p-1">
                                         <User size={20} className="group-hover:text-[#D4AF37] transition-colors" strokeWidth={1.5} />
                                     </button>
@@ -159,13 +166,6 @@ export default function Navbar() {
                                     </Link>
                                 </div>
                             )}
-
-                            {/* Mobile menu button */}
-                            <div className="md:hidden flex items-center">
-                                <button onClick={() => setIsOpen(!isOpen)} className="text-gray-900 p-1">
-                                    {isOpen ? <X size={24} /> : <Menu size={24} />}
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
