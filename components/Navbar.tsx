@@ -104,7 +104,7 @@ export default function Navbar() {
                         <div className="flex items-center space-x-8">
                             <button
                                 onClick={() => setIsSearchOpen(true)}
-                                className="hidden md:block group p-1"
+                                className="group p-1"
                             >
                                 <Search size={20} className="group-hover:text-[#D4AF37] transition-colors" strokeWidth={1.5} />
                             </button>
@@ -151,7 +151,8 @@ export default function Navbar() {
                                         </div>
                                     </div>
                                 </div>
-                            ) : (
+                            ) : null}
+                            {!session && (
                                 <div className="hidden md:block">
                                     <Link href="/login" className="text-[11px] tracking-[0.2em] font-semibold hover:text-[#D4AF37] transition-all uppercase">
                                         Sign In
@@ -170,18 +171,54 @@ export default function Navbar() {
                 </div>
 
                 {/* Mobile Menu */}
-                {isOpen && (
-                    <div className="md:hidden glass border-b border-[#D4AF37]/20 animate-in slide-in-from-top duration-500 overflow-hidden">
-                        <div className="px-6 pt-4 pb-10 space-y-4">
-                            <Link href="/products" className="block text-sm font-semibold tracking-widest uppercase">SHOP ALL</Link>
-                            <Link href="/products?category=skincare" className="block text-sm font-semibold tracking-widest uppercase">SKINCARE</Link>
-                            <Link href="/products?category=makeup" className="block text-sm font-semibold tracking-widest uppercase">MAKEUP</Link>
-                            {!session && (
-                                <Link href="/login" className="block text-sm font-semibold tracking-widest uppercase text-[#D4AF37]">SIGN IN</Link>
+                <div className={`md:hidden glass border-b border-[#D4AF37]/20 transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>
+                    <div className="px-6 pt-4 pb-10 space-y-6">
+                        <div className="space-y-4">
+                            <p className="text-[10px] font-bold text-gray-400 tracking-[0.2em] uppercase">Categories</p>
+                            <Link href="/products" onClick={() => setIsOpen(false)} className="block text-sm font-semibold tracking-widest uppercase hover:text-[#D4AF37] transition-colors">SHOP ALL</Link>
+                            <Link href="/products?category=skincare" onClick={() => setIsOpen(false)} className="block text-sm font-semibold tracking-widest uppercase hover:text-[#D4AF37] transition-colors">SKINCARE</Link>
+                            <Link href="/products?category=makeup" onClick={() => setIsOpen(false)} className="block text-sm font-semibold tracking-widest uppercase hover:text-[#D4AF37] transition-colors">MAKEUP</Link>
+                        </div>
+
+                        <div className="pt-6 border-t border-[#D4AF37]/10 space-y-4">
+                            <p className="text-[10px] font-bold text-gray-400 tracking-[0.2em] uppercase">Account</p>
+                            {session ? (
+                                <>
+                                    <div className="flex items-center space-x-3 mb-2">
+                                        <div className="w-8 h-8 rounded-full bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37]">
+                                            <User size={16} />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-xs font-bold truncate">{session.user?.name}</p>
+                                        </div>
+                                    </div>
+                                    {(session.user as any).role === 'ADMIN' && (
+                                        <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center text-sm font-semibold tracking-widest uppercase hover:text-[#D4AF37] transition-colors">
+                                            <LayoutDashboard size={16} className="mr-3" /> Dashboard
+                                        </Link>
+                                    )}
+                                    <Link href="/orders" onClick={() => setIsOpen(false)} className="flex items-center text-sm font-semibold tracking-widest uppercase hover:text-[#D4AF37] transition-colors">
+                                        <ShoppingBag size={16} className="mr-3" /> My Orders
+                                    </Link>
+                                    <button
+                                        onClick={() => {
+                                            setIsOpen(false);
+                                            signOut();
+                                            toast.success('Signed out successfully');
+                                        }}
+                                        className="flex items-center text-sm font-semibold tracking-widest uppercase text-red-500 hover:text-red-600 transition-colors"
+                                    >
+                                        <LogOut size={16} className="mr-3" /> Sign Out
+                                    </button>
+                                </>
+                            ) : (
+                                <Link href="/login" onClick={() => setIsOpen(false)} className="block text-sm font-semibold tracking-widest uppercase text-[#D4AF37]">
+                                    SIGN IN
+                                </Link>
                             )}
                         </div>
                     </div>
-                )}
+                </div>
             </nav>
 
             {/* Centered Floating Search Modal */}
