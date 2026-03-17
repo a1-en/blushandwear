@@ -3,6 +3,7 @@ import Order from '@/models/Order';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(req: Request) {
     try {
@@ -33,6 +34,9 @@ export async function POST(req: Request) {
             shippingAddress,
             totalPrice,
         });
+
+        revalidatePath('/admin/orders');
+        revalidatePath('/admin');
 
         return NextResponse.json(order, { status: 201 });
     } catch (error: any) {

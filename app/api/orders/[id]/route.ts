@@ -5,6 +5,7 @@ import User from '@/models/User';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 
 export async function GET(
     req: Request,
@@ -60,6 +61,9 @@ export async function PATCH(
         if (!order) {
             return NextResponse.json({ message: 'Order not found' }, { status: 404 });
         }
+
+        revalidatePath('/admin/orders');
+        revalidatePath('/admin');
 
         return NextResponse.json(order);
     } catch (error: any) {

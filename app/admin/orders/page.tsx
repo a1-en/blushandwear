@@ -3,6 +3,8 @@ import Order from '@/models/Order';
 import AdminLayout from '@/components/AdminLayout';
 import AdminOrderList from '@/components/AdminOrderList';
 
+export const dynamic = 'force-dynamic';
+
 async function getOrders() {
     await connectDB();
     const orders = await Order.find().sort({ createdAt: -1 }).populate('user', 'name email');

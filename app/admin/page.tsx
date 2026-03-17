@@ -6,6 +6,8 @@ import Order from '@/models/Order';
 import Product from '@/models/Product';
 import User from '@/models/User';
 
+export const dynamic = 'force-dynamic';
+
 async function getStats(range?: string) {
     await connectDB();
 

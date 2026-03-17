@@ -35,6 +35,7 @@ export async function PUT(
         // Revalidate the product list pages
         revalidatePath('/products');
         revalidatePath('/admin/products');
+        revalidatePath('/admin');
 
         return NextResponse.json(product);
     } catch (error: any) {
@@ -56,6 +57,7 @@ export async function DELETE(
         // Revalidate the product list pages
         revalidatePath('/products');
         revalidatePath('/admin/products');
+        revalidatePath('/admin');
 
         return NextResponse.json({ message: 'Product deleted successfully' });
     } catch (error: any) {

@@ -13,6 +13,7 @@ export async function POST(req: Request) {
         // Revalidate the product list pages
         revalidatePath('/products');
         revalidatePath('/admin/products');
+        revalidatePath('/admin');
 
         return NextResponse.json(product, { status: 201 });
     } catch (error: any) {
