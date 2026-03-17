@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import AdminProductList from '@/components/AdminProductList';
 
+export const dynamic = 'force-dynamic';
+
 async function getProducts() {
     await connectDB();
     const products = await Product.find().sort({ createdAt: -1 });

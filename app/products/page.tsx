@@ -5,6 +5,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductGrid from '@/components/ProductGrid';
 
+export const dynamic = 'force-dynamic';
+
 async function getProducts() {
     await connectDB();
     const products = await Product.find({}).sort({ createdAt: -1 });

@@ -1,6 +1,7 @@
 import connectDB from '@/lib/mongodb';
 import Product from '@/models/Product';
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(req: Request) {
     try {
@@ -8,6 +9,10 @@ export async function POST(req: Request) {
         const body = await req.json();
 
         const product = await Product.create(body);
+
+        // Revalidate the product list pages
+        revalidatePath('/products');
+        revalidatePath('/admin/products');
 
         return NextResponse.json(product, { status: 201 });
     } catch (error: any) {
